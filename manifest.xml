@@ -28,7 +28,7 @@
 
   <!-- Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list. -->
   <AppDomains>
-    <AppDomain>https://localhost:3001</AppDomain>
+    <AppDomain>https://nutrient-dws-vercel-word-l4ew7apzw-matthewms-projects-e3b6e354.vercel.app</AppDomain>
     <AppDomain>https://api.nutrient.io</AppDomain>
   </AppDomains>
   <!--End Basic Settings. -->
@@ -39,7 +39,7 @@
     <Host Name="Document"/>
   </Hosts>
   <DefaultSettings>
-            <SourceLocation DefaultValue="https://localhost:3001/index.html"/>
+            <SourceLocation DefaultValue="https://nutrient-dws-vercel-word-l4ew7apzw-matthewms-projects-e3b6e354.vercel.app/index.html"/>
   </DefaultSettings>
   <!-- End TaskPane Mode integration.  -->
 
@@ -122,7 +122,7 @@
       <bt:Urls>
         <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
         <bt:Url id="Commands.Url" DefaultValue="https://localhost:3001/commands.html" />
-        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3001/index.html" />
+        <bt:Url id="Taskpane.Url" DefaultValue="https://nutrient-dws-vercel-word-l4ew7apzw-matthewms-projects-e3b6e354.vercel.app/index.html" />
       </bt:Urls>
       <!-- ShortStrings max characters==125. -->
       <bt:ShortStrings>
