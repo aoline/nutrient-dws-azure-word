@@ -4,7 +4,7 @@ export class DocumentService {
   private getApiUrl(endpoint: string): string {
     // In development, use localhost. In production, this would be your Vercel deployment URL
     const baseUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://your-vercel-app.vercel.app'
+      ? 'https://nutrient-dws-vercel-word-l4ew7apzw-matthewms-projects-e3b6e354.vercel.app'
       : 'https://localhost:3001';
     return `${baseUrl}${endpoint}`;
   }
