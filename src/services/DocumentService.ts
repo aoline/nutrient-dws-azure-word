@@ -5,7 +5,7 @@ export class DocumentService {
     // In development, use localhost. In production, this would be your Vercel deployment URL
     const baseUrl = process.env.NODE_ENV === 'production' 
       ? 'https://your-vercel-app.vercel.app'
-      : 'http://localhost:3000';
+      : 'http://localhost:3001';
     return `${baseUrl}${endpoint}`;
   }
 
