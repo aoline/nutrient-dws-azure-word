@@ -31,7 +31,6 @@
     "@microsoft/office-js": "^1.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "office-ui-fabric-react": "^7.199.1",
     "axios": "^1.6.0",
     "@vercel/node": "^3.0.0"
   },
