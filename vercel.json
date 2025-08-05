@@ -5,7 +5,8 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist"
+        "distDir": "dist",
+        "buildCommand": "npm run vercel-build"
       }
     },
     {
@@ -24,7 +25,7 @@
     }
   ],
   "env": {
-    "NUTRIENT_API_KEY": "@nutrient_api_key",
-    "NUTRIENT_VIEWER_API_KEY": "@nutrient_viewer_api_key"
+    "NUTRIENT_API_KEY": "pdf_live_DAsgbvjLQGC6VeUozfIRdKdDvGKBvqlnMu8KXwemPaX",
+    "NUTRIENT_VIEWER_API_KEY": "pdf_live_7FqeZD6pwwso0fj7nZacIerdIPvejYTy0AdDjePd90S"
   }
 } 

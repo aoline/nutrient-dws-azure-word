@@ -3,6 +3,8 @@ declare global {
   interface Window {
     Office: any;
   }
+  
+  const Office: any;
 }
 
 // API Response types
@@ -10,6 +12,7 @@ export interface NutrientBuildResponse {
   success: boolean;
   pdfUrl?: string;
   documentId?: string;
+  viewerUrl?: string;
   error?: string;
 }
 

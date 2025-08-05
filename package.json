@@ -15,7 +15,8 @@
     "sideload": "office-addin-debugging start manifest.xml",
     "dev-server": "office-addin-debugging start manifest.xml --dev-server",
     "vercel:dev": "vercel dev",
-    "vercel:deploy": "vercel --prod"
+    "vercel:deploy": "vercel --prod",
+    "vercel-build": "npm install --legacy-peer-deps && npm run build"
   },
   "keywords": [
     "office-addin",
@@ -52,7 +53,9 @@
     "typescript": "^5.0.0",
     "webpack": "^5.88.0",
     "webpack-cli": "^5.1.0",
-    "webpack-dev-server": "^4.15.0"
+    "webpack-dev-server": "^4.15.0",
+    "css-loader": "^6.8.0",
+    "style-loader": "^3.3.0"
   },
   "engines": {
     "node": ">=18.0.0"
