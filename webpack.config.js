@@ -47,6 +47,7 @@ module.exports = (env, argv) => {
       compress: true,
       port: 3001,
       hot: true,
+      https: true,
       headers: {
         'Access-Control-Allow-Origin': '*',
       },
