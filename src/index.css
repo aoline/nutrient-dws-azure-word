@@ -1,0 +1,144 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f3f2f1;
+}
+
+#container {
+  padding: 20px;
+  min-height: 100vh;
+}
+
+#loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.app {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  color: #323130;
+  font-size: 24px;
+  margin: 0 0 8px 0;
+}
+
+.header p {
+  color: #605e5c;
+  margin: 0;
+}
+
+.button {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  width: 100%;
+  margin: 8px 0;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: #106ebe;
+}
+
+.button:disabled {
+  background-color: #c8c6c4;
+  cursor: not-allowed;
+}
+
+.button.secondary {
+  background-color: #f3f2f1;
+  color: #323130;
+  border: 1px solid #c8c6c4;
+}
+
+.button.secondary:hover {
+  background-color: #edebe9;
+}
+
+.status {
+  padding: 12px;
+  border-radius: 4px;
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+.status.success {
+  background-color: #dff6dd;
+  color: #107c10;
+  border: 1px solid #107c10;
+}
+
+.status.error {
+  background-color: #fde7e9;
+  color: #d13438;
+  border: 1px solid #d13438;
+}
+
+.status.info {
+  background-color: #deecf9;
+  color: #0078d4;
+  border: 1px solid #0078d4;
+}
+
+.iframe-container {
+  margin: 16px 0;
+  border: 1px solid #c8c6c4;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.iframe-container iframe {
+  width: 100%;
+  height: 400px;
+  border: none;
+}
+
+.tab-container {
+  margin: 16px 0;
+}
+
+.tab-buttons {
+  display: flex;
+  border-bottom: 1px solid #c8c6c4;
+  margin-bottom: 16px;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  color: #605e5c;
+}
+
+.tab-button.active {
+  color: #0078d4;
+  border-bottom-color: #0078d4;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+} 
