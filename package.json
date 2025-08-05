@@ -14,8 +14,8 @@
     "validate": "office-addin-manifest validate manifest.xml",
     "sideload": "office-addin-debugging start manifest.xml",
     "dev-server": "office-addin-debugging start manifest.xml --dev-server",
-    "azure:start": "func start",
-    "azure:deploy": "func azure functionapp publish my-nutrient-proxy"
+    "vercel:dev": "vercel dev",
+    "vercel:deploy": "vercel --prod"
   },
   "keywords": [
     "office-addin",
@@ -31,7 +31,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "office-ui-fabric-react": "^7.199.1",
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "@vercel/node": "^3.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",

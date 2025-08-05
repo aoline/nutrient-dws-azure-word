@@ -7,7 +7,7 @@ A Microsoft Word Add-in that integrates with Nutrient.io's Document Engine (Proc
 - **Export to PDF**: Convert Word documents to PDF (PDF/A, PDF/UA) with live preview
 - **Import from PDF**: Convert PDFs to Word documents using OCR
 - **Redaction & Metadata Stripping**: Remove sensitive information and metadata
-- **Secure Backend**: Azure Functions proxy for CORS and API key protection
+- **Secure Backend**: Vercel serverless functions for CORS and API key protection
 - **Viewer Integration**: Embed processed PDFs in iframe for preview
 
 ## Architecture
@@ -16,7 +16,7 @@ A Microsoft Word Add-in that integrates with Nutrient.io's Document Engine (Proc
 [Word Add-in (OfficeJS + React)]
     ↕ retrieves document via Office.context
     ↓ POST file + instructions
-[Azure Functions Proxy]
+[Vercel Serverless Functions]
  ├─ /api/build           ↔ Nutrient `/build`
  └─ /api/viewer-upload   ↔ Nutrient `/viewer/documents`
     ↓ responses (PDF or JSON)
@@ -30,7 +30,7 @@ A Microsoft Word Add-in that integrates with Nutrient.io's Document Engine (Proc
 ### Prerequisites
 
 - Node.js 18+
-- Azure Functions Core Tools
+- Vercel CLI (`npm install -g vercel`)
 - Nutrient.io API keys (Processor + Viewer)
 - Microsoft Word (desktop or online)
 
@@ -40,22 +40,20 @@ A Microsoft Word Add-in that integrates with Nutrient.io's Document Engine (Proc
    ```bash
    git clone <repository-url>
    cd nutrient-dws-azure-word
-   npm install
-   cd azure-functions && npm install
+   npm install --legacy-peer-deps
    ```
 
 2. **Configure environment variables:**
    ```bash
-   # Copy and edit local settings
-   cp azure-functions/local.settings.json.example azure-functions/local.settings.json
-   # Add your API keys to local.settings.json
+   # Create .env.local file
+   echo "NUTRIENT_API_KEY=your-processor-api-key" > .env.local
+   echo "NUTRIENT_VIEWER_API_KEY=your-viewer-api-key" >> .env.local
    ```
 
 3. **Start development servers:**
    ```bash
-   # Terminal 1: Start Azure Functions
-   cd azure-functions
-   npm start
+   # Terminal 1: Start Vercel dev server (includes API routes)
+   npm run vercel:dev
    
    # Terminal 2: Start frontend dev server
    npm run dev
@@ -66,23 +64,28 @@ A Microsoft Word Add-in that integrates with Nutrient.io's Document Engine (Proc
    npm run sideload
    ```
 
-### Production Deployment
+### Production Deployment with Vercel
 
-1. **Set up Azure resources:**
-   - Create Azure Function App
-   - Create Azure Static Web App (optional)
-   - Configure CORS settings
-
-2. **Configure GitHub Secrets:**
-   - `AZURE_CREDENTIALS`
-   - `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
-   - `NUTRIENT_API_KEY`
-   - `NUTRIENT_VIEWER_API_KEY`
-
-3. **Deploy:**
+1. **Deploy to Vercel:**
    ```bash
-   git push origin main
+   # First time setup
+   vercel login
+   vercel
+   
+   # For production deployment
+   npm run vercel:deploy
    ```
+
+2. **Configure environment variables in Vercel:**
+   - Go to your Vercel dashboard
+   - Navigate to Settings → Environment Variables
+   - Add:
+     - `NUTRIENT_API_KEY` = your processor API key
+     - `NUTRIENT_VIEWER_API_KEY` = your viewer API key
+
+3. **Update manifest.xml:**
+   - Replace `https://localhost:3000` with your Vercel deployment URL
+   - Update `AppDomains` to include your Vercel domain
 
 ## Project Structure
 
@@ -93,18 +96,18 @@ nutrient-dws-azure-word/
 │   ├── services/                 # API services
 │   ├── types/                    # TypeScript definitions
 │   └── utils/                    # Utility functions
-├── azure-functions/              # Azure Functions backend
-│   ├── src/                      # Function source code
-│   ├── host.json                 # Functions configuration
-│   └── local.settings.json       # Local environment
+├── api/                          # Vercel serverless functions
+│   ├── build.ts                  # PDF conversion endpoint
+│   └── viewer-upload.ts          # Viewer upload endpoint
 ├── manifest.xml                  # Office Add-in manifest
-├── package.json                  # Frontend dependencies
-└── .github/workflows/            # CI/CD pipelines
+├── package.json                  # Dependencies and scripts
+├── vercel.json                   # Vercel configuration
+└── .env                          # Environment variables
 ```
 
 ## API Endpoints
 
-### Azure Functions
+### Vercel Serverless Functions
 
 - `POST /api/build` - Proxy to Nutrient.io build API
 - `POST /api/viewer-upload` - Proxy to Nutrient.io viewer API
@@ -138,20 +141,7 @@ nutrient-dws-azure-word/
 
 ### CORS Settings
 
-Configure in `azure-functions/host.json`:
-
-```json
-{
-  "http": {
-    "cors": {
-      "allowedOrigins": [
-        "https://localhost:3000",
-        "https://your-addin-domain.com"
-      ]
-    }
-  }
-}
-```
+Vercel automatically handles CORS for serverless functions. The configuration is in `vercel.json`.
 
 ## Development Commands
 
@@ -162,10 +152,9 @@ npm run build        # Build for production
 npm run test         # Run tests
 npm run lint         # Lint code
 
-# Azure Functions
-cd azure-functions
-npm start            # Start local Functions runtime
-npm run build        # Build TypeScript
+# Vercel
+npm run vercel:dev   # Start Vercel dev server
+npm run vercel:deploy # Deploy to production
 
 # Office Add-in
 npm run sideload     # Sideload add-in to Word
@@ -176,24 +165,14 @@ npm run validate     # Validate manifest
 
 ### Common Issues
 
-1. **CORS Errors**: Ensure CORS is configured in `host.json`
-2. **API Key Errors**: Verify environment variables are set
+1. **CORS Errors**: Vercel handles CORS automatically
+2. **API Key Errors**: Verify environment variables are set in Vercel dashboard
 3. **Office.js Loading**: Check manifest.xml source location
-4. **Build Failures**: Ensure all dependencies are installed
+4. **Build Failures**: Ensure all dependencies are installed with `--legacy-peer-deps`
 
 ### Debug Mode
 
-Enable debug logging in Azure Functions:
-
-```json
-{
-  "logging": {
-    "logLevel": {
-      "default": "Debug"
-    }
-  }
-}
-```
+Enable debug logging in Vercel functions by adding console.log statements.
 
 ## Contributing
 

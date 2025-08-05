@@ -1,11 +1,11 @@
 import { ProcessingOptions, NutrientBuildResponse, NutrientViewerResponse, API_ENDPOINTS } from '../types';
 
 export class DocumentService {
-  private getAzureFunctionUrl(endpoint: string): string {
-    // In development, use localhost. In production, this would be your Azure Function URL
+  private getApiUrl(endpoint: string): string {
+    // In development, use localhost. In production, this would be your Vercel deployment URL
     const baseUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://your-azure-function-app.azurewebsites.net'
-      : 'http://localhost:7071';
+      ? 'https://your-vercel-app.vercel.app'
+      : 'http://localhost:3000';
     return `${baseUrl}${endpoint}`;
   }
 
@@ -37,7 +37,7 @@ export class DocumentService {
     const formData = new FormData();
     formData.append('file', pdfBlob, 'document.pdf');
 
-    const response = await fetch(this.getAzureFunctionUrl(API_ENDPOINTS.VIEWER_UPLOAD), {
+          const response = await fetch(this.getApiUrl(API_ENDPOINTS.VIEWER_UPLOAD), {
       method: 'POST',
       body: formData,
     });
@@ -74,8 +74,8 @@ export class DocumentService {
       
       formData.append('instructions', JSON.stringify(instructions));
 
-      // Call the Azure Function
-      const response = await fetch(this.getAzureFunctionUrl(API_ENDPOINTS.BUILD), {
+      // Call the API
+      const response = await fetch(this.getApiUrl(API_ENDPOINTS.BUILD), {
         method: 'POST',
         body: formData,
       });
@@ -127,7 +127,7 @@ export class DocumentService {
       
       formData.append('instructions', JSON.stringify(instructions));
 
-      const response = await fetch(this.getAzureFunctionUrl(API_ENDPOINTS.BUILD), {
+      const response = await fetch(this.getApiUrl(API_ENDPOINTS.BUILD), {
         method: 'POST',
         body: formData,
       });
@@ -169,7 +169,7 @@ export class DocumentService {
       
       formData.append('instructions', JSON.stringify(instructions));
 
-      const response = await fetch(this.getAzureFunctionUrl(API_ENDPOINTS.BUILD), {
+      const response = await fetch(this.getApiUrl(API_ENDPOINTS.BUILD), {
         method: 'POST',
         body: formData,
       });

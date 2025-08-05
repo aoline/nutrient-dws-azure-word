@@ -1,6 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import axios from "axios";
-import * as FormData from "form-data";
+import FormData from "form-data";
 
 app.http('viewer-upload', {
   methods: ['POST'],
@@ -21,7 +21,15 @@ app.http('viewer-upload', {
 
       // Parse multipart form data
       const formData = await request.formData();
-      const file = formData.get('file') as File;
+      const fileEntry = formData.get('file');
+
+      if (!fileEntry || !(fileEntry instanceof File)) {
+        return {
+          status: 400,
+          body: JSON.stringify({ error: 'No valid file provided' })
+        };
+      }
+      const file = fileEntry;
 
       if (!file) {
         return {
