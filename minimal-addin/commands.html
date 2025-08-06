@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Minimal Test Add-in - Commands</title>
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+</head>
+<body>
+    <div id="container">
+        <div id="loading">Loading commands...</div>
+    </div>
+    <script>
+        Office.onReady(function(info) {
+            if (info.host === Office.HostType.Word) {
+                // Commands are handled by the main add-in
+                document.getElementById('container').innerHTML =
+                    '<div style="padding: 20px; text-align: center; color: #666;">Commands loaded successfully.</div>';
+            }
+        });
+    </script>
+</body>
+</html> 

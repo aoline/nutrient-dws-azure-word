@@ -24,7 +24,8 @@ export const ExportTab: React.FC<ExportTabProps> = ({ onExport, isLoading, pdfUr
     if (pdfUrl) {
       const link = document.createElement('a');
       link.href = pdfUrl;
-      link.download = 'document.pdf';
+      link.download = `document-${format}.pdf`;
+      link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -34,8 +35,8 @@ export const ExportTab: React.FC<ExportTabProps> = ({ onExport, isLoading, pdfUr
   return (
     <div className="tab-content active">
       <div>
-        <h3>Export to PDF</h3>
-        <p>Convert your current Word document to PDF format.</p>
+        <h3>Export Word Document to PDF</h3>
+        <p>Convert your current document to PDF format.</p>
         
         <div style={{ marginBottom: '16px' }}>
           <label>
@@ -68,28 +69,89 @@ export const ExportTab: React.FC<ExportTabProps> = ({ onExport, isLoading, pdfUr
           className="button"
           onClick={handleExport}
           disabled={isLoading}
+          style={{ 
+            backgroundColor: '#0078d4', 
+            color: 'white', 
+            padding: '10px 20px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: isLoading ? 'not-allowed' : 'pointer',
+            opacity: isLoading ? 0.6 : 1
+          }}
         >
-          {isLoading ? 'Converting...' : 'Convert to PDF'}
+          {isLoading ? 'Converting...' : 'Export to PDF'}
         </button>
 
         {pdfUrl && (
-          <div style={{ marginTop: '16px' }}>
-            <h4>Conversion Complete!</h4>
-            <button
-              className="button secondary"
-              onClick={handleDownload}
-              style={{ marginBottom: '8px' }}
-            >
-              Download PDF
-            </button>
+          <div style={{ 
+            marginTop: '20px', 
+            padding: '16px', 
+            backgroundColor: '#f0f8ff', 
+            borderRadius: '8px',
+            border: '1px solid #0078d4'
+          }}>
+            <h4 style={{ color: '#0078d4', margin: '0 0 12px 0' }}>✅ Export Successful!</h4>
+            <p style={{ margin: '0 0 16px 0', color: '#333' }}>
+              Your document has been converted to PDF format. You can now download it or preview it below.
+            </p>
+            
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <button
+                onClick={handleDownload}
+                style={{
+                  backgroundColor: '#107c10',
+                  color: 'white',
+                  padding: '10px 20px',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                📥 Download PDF
+              </button>
+              
+              {viewerUrl && (
+                <a
+                  href={viewerUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    backgroundColor: '#0078d4',
+                    color: 'white',
+                    padding: '10px 20px',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  👁️ Preview PDF
+                </a>
+              )}
+            </div>
             
             {viewerUrl && (
-              <div className="iframe-container">
-                <iframe
-                  src={viewerUrl}
-                  title="PDF Preview"
-                  sandbox="allow-scripts allow-same-origin"
-                />
+              <div style={{ marginTop: '16px' }}>
+                <h5 style={{ margin: '0 0 8px 0' }}>PDF Preview:</h5>
+                <div style={{ 
+                  border: '1px solid #ddd', 
+                  borderRadius: '4px',
+                  overflow: 'hidden',
+                  height: '400px'
+                }}>
+                  <iframe
+                    src={viewerUrl}
+                    title="PDF Preview"
+                    sandbox="allow-scripts allow-same-origin"
+                    style={{ width: '100%', height: '100%', border: 'none' }}
+                  />
+                </div>
               </div>
             )}
           </div>

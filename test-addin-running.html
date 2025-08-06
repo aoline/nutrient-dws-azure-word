@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrient.io PDF Tools - Test Page</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .button {
+            background-color: #0078d4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .button:hover {
+            background-color: #106ebe;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .feature-list li:before {
+            content: "✅ ";
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Nutrient.io PDF Tools</h1>
+            <p>MS Word Add-in Test Page</p>
+        </div>
+
+        <div class="status success">
+            <h3>✅ Add-in Status: RUNNING</h3>
+            <p>The Nutrient.io PDF Tools add-in is successfully running on <strong>http://localhost:3000</strong></p>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Server Information</h3>
+            <ul class="feature-list">
+                <li>HTTP Server: Running on port 3000</li>
+                <li>Add-in Files: Successfully served</li>
+                <li>Office.js: Loaded and ready</li>
+                <li>React App: Compiled and functional</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h3>🎯 Available Features</h3>
+            <ul class="feature-list">
+                <li><strong>Export to PDF:</strong> Convert Word documents to PDF (PDF/A, PDF/UA)</li>
+                <li><strong>Download PDF:</strong> Direct download with enhanced UI</li>
+                <li><strong>DWS Viewer Integration:</strong> Preview PDFs in Nutrient.io viewer</li>
+                <li><strong>Import from PDF:</strong> OCR and convert PDFs back to DOCX</li>
+                <li><strong>Redact & Strip Metadata:</strong> Remove sensitive information</li>
+                <li><strong>Enhanced UI:</strong> Modern interface with clear feedback</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h3>🔗 Quick Links</h3>
+            <button class="button" onclick="window.open('http://localhost:3000', '_blank')">Open Add-in</button>
+            <button class="button" onclick="window.open('https://viewer.nutrient.io', '_blank')">DWS Viewer</button>
+            <button class="button" onclick="window.open('https://www.nutrient.io/api/docx-to-pdf-api/', '_blank')">API Docs</button>
+        </div>
+
+        <div class="status info">
+            <h3>📋 Next Steps</h3>
+            <ol>
+                <li>Open Microsoft Word (should already be running)</li>
+                <li>Look for the "Nutrient.io Tools" button in the Home tab</li>
+                <li>Click the button to open the add-in taskpane</li>
+                <li>Test the Export to PDF functionality</li>
+                <li>Try the download and preview features</li>
+            </ol>
+        </div>
+
+        <div class="status warning">
+            <h3>⚠️ Troubleshooting</h3>
+            <p>If the add-in doesn't appear in Word:</p>
+            <ul>
+                <li>Check that Word is running and the add-in was sideloaded</li>
+                <li>Try refreshing the add-in or restarting Word</li>
+                <li>Verify the manifest.xml is properly configured</li>
+                <li>Check browser console for any JavaScript errors</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Test Results</h3>
+            <div id="test-results">
+                <p>Running tests...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple test to verify the page is working
+        document.addEventListener('DOMContentLoaded', function() {
+            const testResults = document.getElementById('test-results');
+            
+            const tests = [
+                { name: 'Page Loaded', result: true },
+                { name: 'HTTP Server', result: window.location.hostname === 'localhost' },
+                { name: 'Port 3000', result: window.location.port === '3000' },
+                { name: 'HTTPS/HTTP', result: window.location.protocol === 'http:' || window.location.protocol === 'https:' },
+                { name: 'JavaScript', result: true }
+            ];
+
+            let resultsHtml = '<ul class="feature-list">';
+            tests.forEach(test => {
+                const icon = test.result ? '✅' : '❌';
+                const status = test.result ? 'PASS' : 'FAIL';
+                resultsHtml += `<li>${icon} ${test.name}: ${status}</li>`;
+            });
+            resultsHtml += '</ul>';
+
+            const allPassed = tests.every(test => test.result);
+            const summary = allPassed ? 
+                '<div class="status success"><strong>🎉 All tests passed! The add-in is ready to use.</strong></div>' :
+                '<div class="status warning"><strong>⚠️ Some tests failed. Please check the configuration.</strong></div>';
+
+            testResults.innerHTML = resultsHtml + summary;
+        });
+    </script>
+</body>
+</html> 

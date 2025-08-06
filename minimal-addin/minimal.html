@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Test Add-in</title>
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 300;
+        }
+        
+        .status-card {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .status-card.error {
+            border-left-color: #f44336;
+        }
+        
+        .status-card.warning {
+            border-left-color: #ff9800;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .status-label {
+            font-weight: 500;
+        }
+        
+        .status-value {
+            font-weight: bold;
+        }
+        
+        .status-value.success {
+            color: #4CAF50;
+        }
+        
+        .status-value.error {
+            color: #f44336;
+        }
+        
+        .status-value.warning {
+            color: #ff9800;
+        }
+        
+        .button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .button.secondary {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+        }
+        
+        .button.danger {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+        
+        .button.test {
+            background: linear-gradient(45deg, #9C27B0, #7B1FA2);
+        }
+        
+        .issues-list {
+            background: rgba(244, 67, 54, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .issues-list h4 {
+            margin: 0 0 10px 0;
+            color: #f44336;
+        }
+        
+        .issues-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .issues-list li {
+            margin-bottom: 5px;
+        }
+        
+        .recommendations-list {
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .recommendations-list h4 {
+            margin: 0 0 10px 0;
+            color: #4CAF50;
+        }
+        
+        .recommendations-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .recommendations-list li {
+            margin-bottom: 5px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 20px;
+            background: rgba(76, 175, 80, 0.2);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .success-message h3 {
+            margin: 0 0 10px 0;
+            color: #4CAF50;
+        }
+        
+        .test-results {
+            background: rgba(156, 39, 176, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .test-results h4 {
+            margin: 0 0 10px 0;
+            color: #9C27B0;
+        }
+        
+        .test-results pre {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Minimal Test Add-in</h1>
+        
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Initializing sideloading detection...</p>
+        </div>
+        
+        <div id="content" style="display: none;">
+            <div class="status-card" id="status-card">
+                <h3>🔍 Sideloading Status</h3>
+                <div id="status-items"></div>
+            </div>
+            
+            <div id="issues-section" style="display: none;">
+                <div class="issues-list">
+                    <h4>❌ Issues Found</h4>
+                    <ul id="issues-list"></ul>
+                </div>
+            </div>
+            
+            <div id="recommendations-section" style="display: none;">
+                <div class="recommendations-list">
+                    <h4>💡 Recommendations</h4>
+                    <ul id="recommendations-list"></ul>
+                </div>
+            </div>
+            
+            <div id="success-section" style="display: none;">
+                <div class="success-message">
+                    <h3>✅ All Systems Ready!</h3>
+                    <p>The add-in is properly configured and ready to use.</p>
+                </div>
+            </div>
+            
+            <div id="test-section" style="display: none;">
+                <div class="test-results">
+                    <h4>🧪 Express.js Backend Test</h4>
+                    <p>Test the new Express.js backend conversion functionality:</p>
+                    <button class="button test" onclick="testBackend()">🚀 Test Backend Conversion</button>
+                    <div id="test-results" style="display: none;">
+                        <h5>Test Results:</h5>
+                        <pre id="test-output"></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="button" onclick="runDiagnostics()">🔄 Run Diagnostics</button>
+            <button class="button secondary" onclick="openDebugConsole()">🔍 Debug Console</button>
+            <button class="button secondary" onclick="openSideloadInstructions()">📋 Sideload Instructions</button>
+            <button class="button secondary" onclick="testServerHealth()">🏥 Server Health</button>
+        </div>
+    </div>
+
+    <script>
+        // Mock SideloadingDetector for demonstration
+        class MockSideloadingDetector {
+            constructor() {
+                this.status = this.initializeStatus();
+            }
+
+            initializeStatus() {
+                return {
+                    isOfficeAvailable: false,
+                    isWordEnvironment: false,
+                    isServerRunning: false,
+                    isManifestValid: false,
+                    hasProtocolMismatch: false,
+                    hasPortMismatch: false,
+                    hasContainerElement: false,
+                    issues: [],
+                    recommendations: []
+                };
+            }
+
+            async detectSideloadingIssues() {
+                this.status = this.initializeStatus();
+                
+                // Check Office.js availability
+                this.checkOfficeAvailability();
+                
+                // Check environment configuration
+                this.checkEnvironmentConfiguration();
+                
+                // Check DOM elements
+                this.checkDOMElements();
+                
+                // Check server connectivity
+                await this.checkServerConnectivity();
+                
+                // Check manifest files
+                await this.checkManifestFiles();
+                
+                // Generate recommendations
+                this.generateRecommendations();
+                
+                return this.status;
+            }
+
+            checkOfficeAvailability() {
+                this.status.isOfficeAvailable = typeof Office !== 'undefined';
+                
+                if (!this.status.isOfficeAvailable) {
+                    this.status.issues.push('Office.js is not available');
+                    return;
+                }
+
+                // Check if we're in a Word environment
+                try {
+                    Office.onReady((info) => {
+                        this.status.isWordEnvironment = info.host === Office.HostType.Word;
+                        if (!this.status.isWordEnvironment) {
+                            this.status.issues.push('Add-in is not running in Microsoft Word');
+                        }
+                    });
+                } catch (error) {
+                    this.status.issues.push('Failed to initialize Office.js');
+                }
+            }
+
+            checkEnvironmentConfiguration() {
+                const currentProtocol = window.location.protocol;
+                const currentHostname = window.location.hostname;
+                const currentPort = window.location.port;
+
+                // Check for HTTPS/HTTP mismatch
+                if (currentProtocol === 'https:' && currentHostname === 'localhost') {
+                    this.status.hasProtocolMismatch = true;
+                    this.status.issues.push('HTTPS/HTTP protocol mismatch detected');
+                }
+
+                // Check for port configuration
+                if (currentPort !== '3000') {
+                    this.status.hasPortMismatch = true;
+                    this.status.issues.push(`Expected port 3000, but running on port ${currentPort}`);
+                }
+
+                // Check for localhost environment
+                if (currentHostname !== 'localhost') {
+                    this.status.issues.push('Not running on localhost - may cause sideloading issues');
+                }
+            }
+
+            checkDOMElements() {
+                const container = document.getElementById('content');
+                this.status.hasContainerElement = container !== null;
+                
+                if (!this.status.hasContainerElement) {
+                    this.status.issues.push('Container element not found in DOM');
+                }
+            }
+
+            async checkServerConnectivity() {
+                try {
+                    const response = await fetch(window.location.origin, {
+                        method: 'HEAD',
+                        mode: 'no-cors'
+                    });
+                    this.status.isServerRunning = true;
+                } catch (error) {
+                    this.status.isServerRunning = false;
+                    this.status.issues.push('Local server is not responding');
+                }
+            }
+
+            async checkManifestFiles() {
+                const manifestFiles = [
+                    { name: 'minimal.html', url: '/minimal.html' },
+                    { name: 'commands.html', url: '/commands.html' },
+                    { name: 'icon.svg', url: '/assets/icon.svg' }
+                ];
+
+                const results = await Promise.all(
+                    manifestFiles.map(async (file) => {
+                        try {
+                            const response = await fetch(file.url, { method: 'HEAD' });
+                            return { name: file.name, accessible: response.ok };
+                        } catch {
+                            return { name: file.name, accessible: false };
+                        }
+                    })
+                );
+
+                const allValid = results.every(result => result.accessible);
+                this.status.isManifestValid = allValid;
+
+                results.forEach(result => {
+                    if (!result.accessible) {
+                        this.status.issues.push(`Manifest file not accessible: ${result.name}`);
+                    }
+                });
+            }
+
+            generateRecommendations() {
+                this.status.recommendations = [];
+
+                if (!this.status.isOfficeAvailable) {
+                    this.status.recommendations.push(
+                        'Follow the sideloading instructions at http://localhost:3000/sideload-instructions.html'
+                    );
+                }
+
+                if (this.status.hasProtocolMismatch) {
+                    this.status.recommendations.push(
+                        'Update manifest.xml to use HTTP instead of HTTPS for localhost'
+                    );
+                }
+
+                if (this.status.hasPortMismatch) {
+                    this.status.recommendations.push(
+                        'Ensure the server is running on port 3000'
+                    );
+                }
+
+                if (!this.status.isServerRunning) {
+                    this.status.recommendations.push(
+                        'Start the local server: python3 -m http.server 3000 --directory dist'
+                    );
+                }
+
+                if (!this.status.isManifestValid) {
+                    this.status.recommendations.push(
+                        'Check that all manifest files are present in the dist directory'
+                    );
+                }
+
+                if (this.status.issues.length === 0) {
+                    this.status.recommendations.push(
+                        'All checks passed! The add-in should load properly in Word.'
+                    );
+                }
+            }
+
+            isReady() {
+                return this.status.isOfficeAvailable && 
+                       this.status.isWordEnvironment && 
+                       this.status.isServerRunning && 
+                       this.status.isManifestValid &&
+                       this.status.hasContainerElement &&
+                       this.status.issues.length === 0;
+            }
+        }
+
+        let detector;
+
+        async function initializeApp() {
+            try {
+                detector = new MockSideloadingDetector();
+                const status = await detector.detectSideloadingIssues();
+                
+                // Hide loading, show content
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                
+                // Update UI based on status
+                updateUI(status);
+                
+            } catch (error) {
+                console.error('Error initializing app:', error);
+                document.getElementById('loading').innerHTML = `
+                    <div class="spinner"></div>
+                    <p>Error initializing: ${error.message}</p>
+                `;
+            }
+        }
+
+        function updateUI(status) {
+            const statusItems = document.getElementById('status-items');
+            const statusCard = document.getElementById('status-card');
+            const issuesSection = document.getElementById('issues-section');
+            const recommendationsSection = document.getElementById('recommendations-section');
+            const successSection = document.getElementById('success-section');
+            const testSection = document.getElementById('test-section');
+
+            // Clear previous content
+            statusItems.innerHTML = '';
+            issuesSection.style.display = 'none';
+            recommendationsSection.style.display = 'none';
+            successSection.style.display = 'none';
+            testSection.style.display = 'none';
+
+            // Update status items
+            const statusChecks = [
+                { label: 'Office.js Available', value: status.isOfficeAvailable },
+                { label: 'Word Environment', value: status.isWordEnvironment },
+                { label: 'Server Running', value: status.isServerRunning },
+                { label: 'Manifest Valid', value: status.isManifestValid },
+                { label: 'Container Element', value: status.hasContainerElement },
+                { label: 'Protocol Mismatch', value: !status.hasProtocolMismatch },
+                { label: 'Port Mismatch', value: !status.hasPortMismatch }
+            ];
+
+            statusChecks.forEach(check => {
+                const item = document.createElement('div');
+                item.className = 'status-item';
+                item.innerHTML = `
+                    <span class="status-label">${check.label}</span>
+                    <span class="status-value ${check.value ? 'success' : 'error'}">
+                        ${check.value ? '✅' : '❌'}
+                    </span>
+                `;
+                statusItems.appendChild(item);
+            });
+
+            // Update card styling
+            if (status.issues.length === 0) {
+                statusCard.className = 'status-card';
+                successSection.style.display = 'block';
+                testSection.style.display = 'block';
+            } else if (status.issues.length <= 2) {
+                statusCard.className = 'status-card warning';
+            } else {
+                statusCard.className = 'status-card error';
+            }
+
+            // Show issues if any
+            if (status.issues.length > 0) {
+                const issuesList = document.getElementById('issues-list');
+                issuesList.innerHTML = '';
+                status.issues.forEach(issue => {
+                    const li = document.createElement('li');
+                    li.textContent = issue;
+                    issuesList.appendChild(li);
+                });
+                issuesSection.style.display = 'block';
+            }
+
+            // Show recommendations if any
+            if (status.recommendations.length > 0) {
+                const recommendationsList = document.getElementById('recommendations-list');
+                recommendationsList.innerHTML = '';
+                status.recommendations.forEach(rec => {
+                    const li = document.createElement('li');
+                    li.textContent = rec;
+                    recommendationsList.appendChild(li);
+                });
+                recommendationsSection.style.display = 'block';
+            }
+        }
+
+        async function runDiagnostics() {
+            if (detector) {
+                const status = await detector.detectSideloadingIssues();
+                updateUI(status);
+            }
+        }
+
+        async function testServerHealth() {
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                
+                const testOutput = document.getElementById('test-output');
+                testOutput.textContent = JSON.stringify(data, null, 2);
+                document.getElementById('test-results').style.display = 'block';
+            } catch (error) {
+                const testOutput = document.getElementById('test-output');
+                testOutput.textContent = `Error: ${error.message}`;
+                document.getElementById('test-results').style.display = 'block';
+            }
+        }
+
+        async function testBackend() {
+            try {
+                const testOutput = document.getElementById('test-output');
+                testOutput.textContent = 'Testing backend conversion...';
+                document.getElementById('test-results').style.display = 'block';
+                
+                // Test the /api/status endpoint first
+                const statusResponse = await fetch('/api/status');
+                const statusData = await statusResponse.json();
+                
+                testOutput.textContent = `API Status:\n${JSON.stringify(statusData, null, 2)}\n\n`;
+                testOutput.textContent += 'Backend is ready for conversion testing!';
+                
+            } catch (error) {
+                const testOutput = document.getElementById('test-output');
+                testOutput.textContent = `Backend Test Error:\n${error.message}\n\nMake sure the Express.js server is running.`;
+                document.getElementById('test-results').style.display = 'block';
+            }
+        }
+
+        function openDebugConsole() {
+            window.open('http://localhost:3000/debug.html', '_blank');
+        }
+
+        function openSideloadInstructions() {
+            window.open('http://localhost:3000/sideload-instructions.html', '_blank');
+        }
+
+        // Initialize when Office.js is ready
+        if (typeof Office !== 'undefined') {
+            Office.onReady((info) => {
+                if (info.host === Office.HostType.Word) {
+                    initializeApp();
+                } else {
+                    document.getElementById('loading').innerHTML = `
+                        <div class="spinner"></div>
+                        <p>This add-in is designed to run in Microsoft Word.</p>
+                        <p>Current application: ${info.host}</p>
+                    `;
+                }
+            });
+        } else {
+            // Office.js not available, initialize anyway for testing
+            setTimeout(initializeApp, 1000);
+        }
+    </script>
+</body>
+</html> 

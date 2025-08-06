@@ -9,19 +9,19 @@
   <!-- Begin Basic Settings: Add-in metadata, used for all versions of Office unless override provided. -->
 
   <!-- IMPORTANT! Id must be unique for your add-in, if you reuse this manifest ensure that you change this id to a new GUID. -->
-  <Id>ae51a8ec-c8aa-4a8e-9dee-80d2779216b2</Id>
+  <Id>12345678-1234-1234-1234-123456789012</Id>
 
   <!--Version. Updates from the store only get triggered if there is a version change. -->
   <Version>1.0.0.0</Version>
-  <ProviderName>Nutrient.io</ProviderName>
+  <ProviderName>Test Developer</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
-  <DisplayName DefaultValue="Nutrient.io PDF Tools" />
-  <Description DefaultValue="Export Word documents to PDF and import PDFs with OCR using Nutrient.io APIs." />
+  <DisplayName DefaultValue="Minimal Test Add-in" />
+  <Description DefaultValue="A minimal add-in for testing sideloading detection." />
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
-  <IconUrl DefaultValue="http://localhost:3000/assets/icon.svg"/>
-  <HighResolutionIconUrl DefaultValue="http://localhost:3000/assets/icon.svg"/>
+  <IconUrl DefaultValue="http://localhost:3000/assets/icon.svg" />
+  <HighResolutionIconUrl DefaultValue="http://localhost:3000/assets/icon.svg" />
 
   <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
   <!--<SupportUrl DefaultValue="[Insert the URL of a page that provides support information for the app]">-->
@@ -29,17 +29,15 @@
   <!-- Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list. -->
   <AppDomains>
     <AppDomain>http://localhost:3000</AppDomain>
-    <AppDomain>https://api.nutrient.io</AppDomain>
   </AppDomains>
   <!--End Basic Settings. -->
 
-  <!--Begin TaskPane Mode integration. Office 2013 and any client that doesn't understand commands will use this section.
-    This section will also be used if there are no VersionOverrides or if the Office client version doesn't support the VersionOverrides section.-->
+  <!--Begin TaskPane Mode integration. -->
   <Hosts>
-    <Host Name="Document"/>
+    <Host Name="Document" />
   </Hosts>
   <DefaultSettings>
-            <SourceLocation DefaultValue="http://localhost:3000/index.html"/>
+    <SourceLocation DefaultValue="http://localhost:3000/minimal.html" />
   </DefaultSettings>
   <!-- End TaskPane Mode integration.  -->
 
@@ -115,25 +113,25 @@
     <!-- You can use resources across hosts and form factors. -->
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="http://localhost:3000/assets/icon.svg"/>
-        <bt:Image id="Icon.32x32" DefaultValue="http://localhost:3000/assets/icon.svg"/>
-        <bt:Image id="Icon.80x80" DefaultValue="http://localhost:3000/assets/icon.svg"/>
+        <bt:Image id="Icon.16x16" DefaultValue="http://localhost:3000/assets/icon.svg" />
+        <bt:Image id="Icon.32x32" DefaultValue="http://localhost:3000/assets/icon.svg" />
+        <bt:Image id="Icon.80x80" DefaultValue="http://localhost:3000/assets/icon.svg" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="http://localhost:3000/minimal.html" />
         <bt:Url id="Commands.Url" DefaultValue="http://localhost:3000/commands.html" />
-        <bt:Url id="Taskpane.Url" DefaultValue="http://localhost:3000/index.html" />
+        <bt:Url id="Taskpane.Url" DefaultValue="http://localhost:3000/minimal.html" />
       </bt:Urls>
       <!-- ShortStrings max characters==125. -->
       <bt:ShortStrings>
         <bt:String id="GetStarted.Title" DefaultValue="Get started with your sample add-in!" />
-        <bt:String id="CommandsGroup.Label" DefaultValue="Nutrient.io Tools" />
-        <bt:String id="TaskpaneButton.Label" DefaultValue="PDF Tools" />
+        <bt:String id="CommandsGroup.Label" DefaultValue="Test Add-in" />
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Show Taskpane" />
       </bt:ShortStrings>
       <!-- LongStrings max characters==250. -->
       <bt:LongStrings>
-        <bt:String id="GetStarted.Description" DefaultValue="Your sample add-in loaded succesfully. Go to the HOME tab and click the 'PDF Tools' button to get started." />
-        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to open PDF Tools for document conversion and processing." />
+        <bt:String id="GetStarted.Description" DefaultValue="Your sample add-in loaded succesfully. Go to the HOME tab and click the 'Show Taskpane' button to get started." />
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to Show a Taskpane" />
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>
